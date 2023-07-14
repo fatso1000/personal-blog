@@ -1,0 +1,67 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         Int        @id @default(autoincrement())
+  created_at DateTime   @default(now())
+  email      String     @unique
+  password   String
+  name       String?
+  reminders  Reminder[]
+}
+
+model Reminder {
+  id            Int           @id @default(autoincrement())
+  created_at    DateTime      @default(now())
+  updated_at    DateTime      @updatedAt
+  user          User          @relation(fields: [user_id], references: [id])
+  user_id       Int
+  reminder_info ReminderInfo?
+}
+
+model ReminderInfo {
+  id          Int      @id @default(autoincrement())
+  reminder    Reminder @relation(fields: [reminder_id], references: [id])
+  reminder_id Int      @unique
+  title       String
+  info        String?
+  active      Boolean  @default(true)
+  updated_at  DateTime @updatedAt
+  created_at  DateTime @default(now())
+}
+
+model Post {
+  id           Int         @id @default(autoincrement())
+  details      PostDetail?
+  title        String
+  sub_title    String?
+  description  String?
+  author_name  String
+  verification Boolean
+  reading_time Int
+  updated_at   DateTime    @updatedAt
+  created_at   DateTime    @default(now())
+  post_tag     PostTag[]
+  post_tag_id  Int?
+}
+
+model PostTag {
+  id   Int    @id @default(autoincrement())
+  name String
+  post Post[]
+}
+
+model PostDetail {
+  id         Int      @id @default(autoincrement())
+  Post       Post     @relation(fields: [post_id], references: [id])
+  post_id    Int      @unique
+  content    String
+  updated_at DateTime @updatedAt
+  created_at DateTime @default(now())
+}
