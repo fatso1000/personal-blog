@@ -5,7 +5,7 @@ import { IBlog } from "src/types/clientTypes";
 const getUrl =
   process.env.NODE_ENV === "production"
     ? "http://localhost:3000"
-    : "http://localhost:3000";
+    : "https://personal-blog-delta-amber.vercel.app";
 
 const getAllBlogs = async () => {
   return await handleApiRequest(getUrl + "/api/blog/latest");
