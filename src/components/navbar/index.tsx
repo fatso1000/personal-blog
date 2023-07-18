@@ -1,5 +1,4 @@
 import React from "react";
-import MenuComponent from "../menu";
 import { AiOutlineFontSize } from "react-icons/ai";
 import Link from "next/link";
 
