@@ -51,14 +51,14 @@ const returnComponentByTag = ({ tag, value }: { tag: string; value: any }) => {
     case "$title":
       const title = JSON.parse(value);
       return (
-        <h2 className="text-2xl mb-2 font-extrabold tracking-tight">
+        <h2 className="text-2xl mb-3 font-extrabold tracking-tight">
           {title.content}
         </h2>
       );
     case "$subtitle":
       const subtitle = JSON.parse(value);
       return (
-        <h3 className="text-xl mb-2 font-extrabold tracking-tight">
+        <h3 className="text-xl mb-3 font-extrabold tracking-tight">
           {subtitle.content}
         </h3>
       );

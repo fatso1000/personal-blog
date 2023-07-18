@@ -44,7 +44,7 @@ export async function POST(req: Request) {
     const newBlog = await prisma.post.create({
       data: {
         author_name: body.author_name,
-        reading_time: body.reading_time,
+        reading_time: +body.reading_time,
         title: body.title,
         verification: body.verification,
         description: body.description,

@@ -15,7 +15,6 @@ export class BlogPOST {
   public sub_title?: string;
   @IsOptional()
   public description?: string;
-  @IsNumber()
   public reading_time: number;
   @IsBoolean()
   public verification: boolean = false;

@@ -58,6 +58,35 @@ body {
   transition: 300ms linear;
 }
 
+.rmsc .dropdown-container {
+  background-color: transparent !important;
+  border-radius: 0 !important;
+  border: 1px solid rgb(120 113 108 / 1) !important;
+}
+
+.rmsc .dropdown-heading {
+  height: 3rem !important;
+}
+
+.rmsc .dropdown-content .panel-content {
+  border-radius: 0 !important;
+  background-color: rgb(12 10 9 / 1) !important;
+  border: 1px solid rgb(120 113 108 / 1) !important;
+}
+
+.rmsc .select-item:hover {
+  background: rgb(231 229 228 / 1) !important;
+  color: rgb(12 10 9 / 1) !important;
+}
+
+.rmsc .select-item {
+  transition: background 0.2s ease !important;
+}
+
+.rmsc .gray {
+  color: #9ca3af !important;
+}
+
 @media (max-width: 749px) {
   .code-container.expanded {
     scale: 1.2;

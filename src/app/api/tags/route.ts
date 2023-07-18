@@ -9,12 +9,12 @@ export async function GET(req: NextRequest) {
   try {
     const name = getSearchQuery(req.url, ["name"]);
 
-    if (!name || !name[0])
-      throw new CustomError({
-        errors: [],
-        httpStatusCode: HttpStatusCode.BAD_REQUEST,
-        msg: "Error parsing request name.",
+    if (!name || !name[0]) {
+      const request = await prisma.postTag.findMany();
+      return NextResponse.json({
+        data: request.map((query) => ({ label: query.name, value: query.id })),
       });
+    }
 
     const request = await prisma.post.findMany({
       where: { post_tag: { some: { name: { contains: name[0] } } } },

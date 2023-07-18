@@ -2,22 +2,29 @@
 import React from "react";
 import { useState } from "react";
 import { FaTrash } from "react-icons/fa";
+import { MultiSelect } from "react-multi-select-component";
 import FieldInput from "src/components/inputs/fieldInput";
 import TextInput from "src/components/inputs/textInput";
 import { getComponentsByString } from "src/queryFn";
-import { randomKey } from "src/shared/clientShared";
+import { randomKey, stringifySections } from "src/shared/clientShared";
 import { FieldsEnum, IFields } from "src/types/clientTypes";
+import useSWR from "swr";
 
 export interface ISections {
   id: string;
   fields: IFields[];
 }
 
+const fetcher = (url: string) => fetch(url).then((r) => r.json());
+
 export default function BlogsSearchPage() {
+  const [selectedTags, setSelectedTags] = useState<any[]>([]);
+  const [formValues, setFormValues] = useState({});
   const [sections, setSections] = useState<ISections[]>([]);
   const [previewString, setPreviewString] = useState<
     JSX.Element[][] | undefined
   >(undefined);
+  const { data } = useSWR("/api/tags", fetcher);
 
   const onAddField = (sectionId: string) => {
     const section = sections.findIndex((s) => s.id === sectionId);
@@ -48,17 +55,7 @@ export default function BlogsSearchPage() {
   };
 
   const generatePreview = () => {
-    const componentsList = sections
-      .map((section) => {
-        return section.fields
-          .map((field) => {
-            console.log(field.values);
-            return `#$${field.type} ${JSON.stringify(field.values)}`;
-          })
-          .join("");
-      })
-      .join("@");
-    console.log(componentsList);
+    const componentsList = stringifySections(sections);
     const string = getComponentsByString(`@${componentsList}`);
     setPreviewString(string);
   };
@@ -84,12 +81,11 @@ export default function BlogsSearchPage() {
       }
     }
     arrClone.splice(to, 0, arrClone.splice(from, 1)[0]);
-    return arrClone; // for testing
+    return arrClone;
   };
 
   const onMoveDown = (sectionIndex: number, index: number) => {
     const sectionsClone = [...sections];
-    console.log(index, index - 1);
     sectionsClone[sectionIndex].fields = onMovePosition(
       index,
       index + 1,
@@ -108,7 +104,25 @@ export default function BlogsSearchPage() {
     setSections(sectionsClone);
   };
 
-  // ADD MULTI SELECT LIBRARY TO CHOOSE TAGS
+  const onFormValuesChange = (name: string, value: string) => {
+    setFormValues({ ...formValues, [name]: value });
+  };
+
+  const onSubmitPost = async () => {
+    try {
+      const tags = selectedTags.map((tag) => tag.value);
+      const content = `@${stringifySections(sections)}`;
+      const body = {
+        ...formValues,
+        verification: false,
+        tags,
+        content,
+      };
+      await fetch("/api/blog", { body: JSON.stringify(body), method: "POST" });
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <main className="mt-4">
@@ -118,11 +132,33 @@ export default function BlogsSearchPage() {
         </h1>
       </header>
       <section className="flex flex-col gap-y-3">
-        <TextInput placeholder="Blog Title" />
-        <TextInput placeholder="Blog Subtitle" />
-        <TextInput placeholder="Author name" />
-        <TextInput placeholder="Min Reading" />
-        <div></div>
+        <TextInput
+          placeholder="Blog Title"
+          onValueChange={(value) => onFormValuesChange("title", value)}
+        />
+        <TextInput
+          placeholder="Blog Subtitle"
+          onValueChange={(value) => onFormValuesChange("sub_title", value)}
+        />
+        <TextInput
+          placeholder="Author name"
+          onValueChange={(value) => onFormValuesChange("author_name", value)}
+        />
+        <TextInput
+          placeholder="Min Reading"
+          onValueChange={(value) => onFormValuesChange("reading_time", value)}
+        />
+        <TextInput
+          placeholder="Description"
+          onValueChange={(value) => onFormValuesChange("description", value)}
+        />
+        <input type="checkbox" name="verification" />
+        <MultiSelect
+          options={(data && data.data) || []}
+          value={selectedTags}
+          onChange={setSelectedTags}
+          labelledBy="Select"
+        />
       </section>
       <section className="flex flex-col gap-y-6">
         <div>
@@ -180,7 +216,12 @@ export default function BlogsSearchPage() {
         </div>
         <div>
           <h3 className="text-lg font-extrabold tracking-tight">Preview</h3>
-          <button onClick={generatePreview}>PREVIEW</button>
+          <button type="button" className="btn" onClick={onSubmitPost}>
+            Submit
+          </button>
+          <button onClick={generatePreview} className="btn">
+            PREVIEW
+          </button>
           <div className="max-h-96">
             {previewString &&
               previewString.map((preview, i) => <div key={i}>{preview}</div>)}
