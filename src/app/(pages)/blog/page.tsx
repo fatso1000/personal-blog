@@ -24,8 +24,8 @@ export default async function BlogsSearchPage(props: any) {
         <SearchInput defaultValue={name} />
       </header>
       <section className="flex flex-col gap-y-5">
-        {blogs && blogs.length > 0 ? (
-          <BlogsList blogs={blogs} />
+        {!blogs.error && blogs.data && blogs.data.length > 0 ? (
+          <BlogsList blogs={blogs.data} />
         ) : (
           <span className="absolute text-lg flex flex-col items-center m-auto top-1/2 left-1/2 -translate-x-20">
             <p className="font-bold">No records found</p>

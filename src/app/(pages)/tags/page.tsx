@@ -27,8 +27,8 @@ export default async function TagsByNamePage(props: any) {
         <h1 className="text-2xl">Tag: {name}</h1>
       </header>
       <section className="flex flex-col gap-y-5">
-        {!(blogs instanceof Error) && blogs && blogs.length > 0 ? (
-          <BlogsList blogs={blogs} />
+        {!blogs.error && blogs.data && blogs.data.length > 0 ? (
+          <BlogsList blogs={blogs.data} />
         ) : (
           <span className="absolute text-lg flex flex-col items-center m-auto top-1/2 left-1/2 -translate-x-20">
             <p className="font-bold">No records found</p>

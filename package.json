@@ -4,18 +4,20 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "prisma generate && <actual-build-command>",
     "start": "next start",
     "lint": "next lint",
     "migrate:dev": "npx prisma migrate dev --name dev",
     "db:push": "npx prisma db push",
-    "prisma:studio": "npx prisma studio"
+    "prisma:studio": "npx prisma studio",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@prisma/client": "^4.16.1",
     "@types/bcrypt": "^5.0.0",
     "@types/react": "18.2.13",
     "@types/react-dom": "18.2.6",
+    "@vercel/postgres": "^0.4.0",
     "bcrypt": "^5.1.0",
     "class-validator": "^0.14.0",
     "eslint": "8.43.0",

@@ -2,33 +2,28 @@ import CodeBlock from "src/components/blog/codeBlock";
 import { handleApiRequest } from "src/shared/clientShared";
 import { IBlog } from "src/types/clientTypes";
 
+const getUrl =
+  process.env.NODE_ENV === "production"
+    ? "http://localhost:3000"
+    : "http://localhost:3000";
+
 const getAllBlogs = async () => {
-  return await handleApiRequest(
-    await fetch("http://localhost:3000/api/blog/latest", { cache: "no-store" })
-  );
+  return await handleApiRequest(getUrl + "/api/blog/latest");
 };
 
 const getBlogsByName = async (name?: string) => {
-  return await handleApiRequest(
-    await fetch(encodeURI("http://localhost:3000/api/blog?name=" + name), {
-      cache: "no-store",
-    })
-  );
+  return await handleApiRequest(encodeURI(getUrl + "/api/blog?name=" + name));
 };
 
 const getPostByTagsName = async <T,>(name?: string) => {
   return await handleApiRequest<T>(
-    await fetch(encodeURI("http://localhost:3000/api/tags?name=" + name), {
-      cache: "no-store",
-    })
+    encodeURI(getUrl + "/api/tags?name=" + name)
   );
 };
 
 const getBlogById = async (id: string) => {
-  const request = await handleApiRequest(
-    await fetch("http://localhost:3000/api/blog/" + id, { cache: "no-store" })
-  );
-  return parseBlogById(request);
+  const request = await handleApiRequest(getUrl + "/api/blog/" + id);
+  return parseBlogById(request.data || "");
 };
 
 const getComponentsByString = (str: string) => {

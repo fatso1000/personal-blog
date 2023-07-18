@@ -1,12 +1,13 @@
 import { ISections } from "src/app/(pages)/blog/create/page";
 
-const handleApiRequest = async <T = any>(request: Response) => {
-  const petition = await request.json();
-  if (petition) {
-    if (petition.data) return petition.data as T;
-    if (petition) throw new Error("");
+const handleApiRequest = async <T = any>(request: string) => {
+  try {
+    const fetching = await fetch(request, { cache: "no-store" });
+    const petition = await fetching.json();
+    return { error: undefined, data: petition.data as T };
+  } catch (error) {
+    return { error: error, data: undefined };
   }
-  return new Error("Unknown API request");
 };
 
 const stringifySections = (sections: ISections[]) => {
