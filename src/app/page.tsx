@@ -12,6 +12,7 @@ export async function generateMetadata(props: any): Promise<Metadata> {
 
 export default async function Home() {
   const blogs = await getAllBlogs();
+  console.log(blogs);
   return (
     <main className="mt-4">
       <header className="mb-4">
