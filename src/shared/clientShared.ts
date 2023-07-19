@@ -1,8 +1,13 @@
 import { ISections } from "src/app/(pages)/blog/create/page";
 
+const revalidate = 60;
+
 const handleApiRequest = async <T = any>(request: string) => {
   try {
-    const fetching = await fetch(request, { cache: "no-store" });
+    const fetching = await fetch(request, {
+      cache: "no-store",
+      next: { revalidate },
+    });
     const petition = await fetching.json();
     return { error: undefined, data: petition.data as T };
   } catch (error) {
