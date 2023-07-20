@@ -1,4 +1,3 @@
-import React from "react";
 import { AiOutlineFontSize } from "react-icons/ai";
 import Link from "next/link";
 
@@ -17,24 +16,5 @@ export default function Navbar() {
         <AiOutlineFontSize size={22} />
       </button>
     </nav>
-    // <GridItem as="header" borderBottom={"1px solid"} borderColor={"#919191"}>
-    //   <Flex
-    //     align={"center"}
-    //     justify={"space-between"}
-    //     minH={"7"}
-    //     padding={4}
-    //     paddingRight={0}
-    //     paddingLeft={0}
-    //   >
-    //     <Box>
-    //       <Heading as="h1" size={"md"}>
-    //         Blog
-    //       </Heading>
-    //     </Box>
-    //     <Box>
-    //       <MenuComponent session={true} />
-    //     </Box>
-    //   </Flex>
-    // </GridItem>
   );
 }

@@ -9,6 +9,7 @@ export async function GET(req: Request) {
     const blogPosts = await prisma.post.findMany({
       take: 10,
       include: { post_tag: true },
+      orderBy: { id: "desc" },
     });
 
     if (!blogPosts)

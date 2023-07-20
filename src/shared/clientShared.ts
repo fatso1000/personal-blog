@@ -5,7 +5,6 @@ const revalidate = 60;
 const handleApiRequest = async <T = any>(request: string) => {
   try {
     const fetching = await fetch(request, {
-      cache: "no-store",
       next: { revalidate },
     });
     const petition = await fetching.json();

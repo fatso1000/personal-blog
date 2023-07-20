@@ -1,13 +1,15 @@
 import { validate } from "class-validator";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { CustomError, IUserSignUp, UserSignUpPOST } from "types/apiTypes";
 import { onThrowError } from "../apiService";
 import { HttpStatusCode } from "types/httpStatusCode";
 import prisma from "src/app/config/db";
 import bcrypt from "bcrypt";
+import { verifyUserAuth } from "src/shared/apiShared";
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
+    verifyUserAuth(req);
     let body: IUserSignUp = await req.json();
     const bodyType = new UserSignUpPOST(body);
 

@@ -4,7 +4,7 @@ import { onThrowError, onValidationError } from "../auth/apiService";
 import prisma from "src/app/config/db";
 import { HttpStatusCode } from "src/types/httpStatusCode";
 import { NextRequest, NextResponse } from "next/server";
-import { getSearchQuery } from "src/shared/apiShared";
+import { getSearchQuery, verifyUserAuth } from "src/shared/apiShared";
 
 export async function GET(req: NextRequest) {
   try {
@@ -33,8 +33,9 @@ export async function GET(req: NextRequest) {
   }
 }
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
+    verifyUserAuth(req);
     const body: IBlogAPI = await req.json();
     const bodyType = new BlogPOST(body);
     const validation = await validate(bodyType);

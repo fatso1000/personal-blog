@@ -77,7 +77,6 @@ export class UserLoginPOST {
   @IsEmail()
   public email: string;
 
-  @IsAlphanumeric()
   public password: string;
 
   constructor({ email, password }: IUserLogin) {

@@ -1,4 +1,3 @@
-"use client";
 import Link from "next/link";
 import { memo } from "react";
 import { IBlog } from "src/types/clientTypes";

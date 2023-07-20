@@ -1,6 +1,8 @@
 import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
-import { IUserLogin } from "src/types/apiTypes";
+import { NextRequest } from "next/server";
+import { CustomError, IUserLogin } from "src/types/apiTypes";
+import { HttpStatusCode } from "src/types/httpStatusCode";
 
 const secret = process.env.JWT_SECRET_KEY || "";
 
@@ -53,15 +55,28 @@ const removeCookie = (cookieKey: string) => {
   }
 };
 
-const verifyToken = (token: string) => {
+const verifyToken = (token: string | null) => {
   try {
+    if (!token) return undefined;
     return jwt.verify(token, secret);
   } catch (error) {
     return undefined;
   }
 };
 
+const verifyUserAuth = (req: NextRequest) => {
+  const token = req.headers.get("Authorization");
+  const isLoggedIn = verifyToken(token);
+  if (!token || !isLoggedIn)
+    throw new CustomError({
+      errors: [],
+      httpStatusCode: HttpStatusCode.UNAUTHORIZED,
+      msg: "Error at authorization.",
+    });
+};
+
 export {
+  verifyUserAuth,
   verifyToken,
   setCookie,
   getSearchQuery,
